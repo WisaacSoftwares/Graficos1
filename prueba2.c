@@ -9,11 +9,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
+#include <string.h>
 
 // Declaración de funciones
 void IniciarVentana (SDL_Window **window, SDL_Renderer **renderer, int *windowWidth, int *windowHeight, TTF_Font **font);
 
 void EsperarTiempo(int tiempoEspera);
+
+void EscribirCanvas(char *texto, SDL_Renderer *renderer, TTF_Font *font);
 
 int main(int argc, char *argv[]) {
     SDL_Window *window;
@@ -56,13 +59,7 @@ int main(int argc, char *argv[]) {
     SDL_RenderDrawLines(renderer, points, 3);
 
     // Dibujar texto blanco en (100, 500)
-    SDL_Color textColor = {255, 255, 255, 255};
-    SDL_Surface* surface = TTF_RenderText_Solid(font, "Hola SDL2", textColor);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-    
-    SDL_Rect textRect = {100, 500, surface->w, surface->h};
-    SDL_RenderCopy(renderer, texture, NULL, &textRect);
+    EscribirCanvas("Hola SDL2", renderer, font);
 
     #pragma Delay
 
@@ -78,6 +75,9 @@ int main(int argc, char *argv[]) {
     // Background
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
+
+    // Texto
+    EscribirCanvas("Prueba de texto", renderer, font);
 
     // Dibujar Plano Cartesiano
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
@@ -166,4 +166,15 @@ void EsperarTiempo(int tiempoEspera) {
             }
         }
     }
+}
+
+void EscribirCanvas(char *texto, SDL_Renderer *renderer, TTF_Font *font) {
+    // Dibujar texto blanco en (100, 500)
+    SDL_Color textColor = {255, 255, 255, 255};
+    SDL_Surface* surface = TTF_RenderText_Solid(font, texto, textColor);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+    
+    SDL_Rect textRect = {100, 500, surface->w, surface->h};
+    SDL_RenderCopy(renderer, texture, NULL, &textRect);
 }
