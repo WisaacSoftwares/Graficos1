@@ -1,11 +1,11 @@
 # CC = gcc
 CC = C:/MinGW/bin/gcc.exe
-CFLAGS = -I"./lib/SDL2/include"
-LDFLAGS = -L"./lib/SDL2/lib"
+CFLAGS = -I"./resources/SDL2/include"
+LDFLAGS = -L"./resources/SDL2/lib"
 LIBS = -lSDL2 -lSDL2_ttf
 
 TARGET = prueba2
-SRC = prueba2.c
+SRC = prueba2.c resources/library.c
 
 all: $(TARGET)
 
