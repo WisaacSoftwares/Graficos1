@@ -9,3 +9,5 @@ void CerrarVentana (SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font);
 void EsperarTiempo(int tiempoEspera);
 
 void EscribirCanvas(char *texto, int x, int y, SDL_Renderer *renderer, TTF_Font *font, SDL_Color textColor);
+
+void EscribirCanvasCentrado(char *texto, int x, int y, SDL_Renderer *renderer, TTF_Font *font, SDL_Color textColor);

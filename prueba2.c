@@ -35,6 +35,7 @@ void GraficarCuadratica (struct FuncionCuadratica funcion, SDL_Color color);
 void GraficarLineal (struct FuncionLineal funcion, SDL_Color color);
 void DrawVector (struct Vector vector, SDL_Color color);
 void DrawFunciones ();
+void DrawVectores ();
 
 int main(int argc, char *argv[]) {
     IniciarVentana(&window, &renderer, &windowWidth, &windowHeight, &font);
@@ -42,52 +43,20 @@ int main(int argc, char *argv[]) {
     center = _center;
 
     // Dibujos
-
-    // DrawIntro(renderer, font, 1000);
+    DrawIntro(1000);
 
     // Plano Cartesiano
-
-    DrawPlano(renderer, windowWidth, windowHeight, pixelsPerUnit, font);
+    DrawPlano();
 
     // Funciones Matemáticas
-
-    // DrawFunciones(renderer, windowWidth, windowHeight, pixelsPerUnit, font);
+    DrawFunciones();
 
     // Vectores
-    struct Vector vector1;
-    vector1.nombre = "Vector Amarillo";
-    vector1.x = 1;
-    vector1.y = 4;
-    vector1.z = 2;
-    SDL_Color vector1_col = {255, 255, 0, 255};
-    DrawVector(vector1, vector1_col);
+    DrawVectores();
 
-    struct Vector vector2;
-    vector2.nombre = "Vector Azul";
-    vector2.x = -2;
-    vector2.y = 2;
-    vector2.z = 3;
-    SDL_Color vector2_col = {0, 0, 255, 255};
-    DrawVector(vector2, vector2_col);
-
-    struct Vector vector3;
-    vector3.nombre = "Vector Rojo";
-    vector3.x = 4;
-    vector3.y = -4;
-    vector3.z = -2;
-    SDL_Color vector3_col = {255, 0, 0, 255};
-    DrawVector(vector3, vector3_col);
-
-    // struct Vector vector4;
-    // vector4.nombre = "Vector Verde";
-    // vector4.x = 4;
-    // vector4.y = -4;
-    // vector4.z = 3;
-    // SDL_Color vector4_col = {0, 255, 0, 255};
-    // DrawVector(vector4, vector4_col);
+    // fflush(stdout);
 
     // Close Events
-
     CerrarVentana(window, renderer, font);
 
     return 0;
@@ -128,9 +97,6 @@ void DrawIntro (int delay){
     #pragma Delay
 
     SDL_RenderPresent(renderer);
-    // SDL_Delay(3000);
-
-    // Uint32 startTime = SDL_GetTicks();  // Obtiene el tiempo de inicio
 
     EsperarTiempo(delay);
 }
@@ -238,12 +204,13 @@ void DrawVector (struct Vector vector, SDL_Color color){
     point[0] = (int)((vector.y*pixelsPerUnit) + center.x);
     point[1] = (int)(-(vector.z*pixelsPerUnit) + center.y);
 
+    // Linea Principal
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_RenderDrawLine(renderer, center.x, center.y, point[0] - fase, point[1] + fase);
 
     // Guías
     if (vector.x > 0) SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
-    else SDL_SetRenderDrawColor(renderer, 255, 255, 255, 30);
+    else SDL_SetRenderDrawColor(renderer, 255, 255, 255, 50);
     
     SDL_RenderDrawLine(renderer, center.x, center.y, point[0] - fase, center.y + fase); // del origen hasta la proyección YX
     SDL_Rect rect1 = {center.x, point[1], (int)(vector.y*pixelsPerUnit), (int)(vector.z*pixelsPerUnit)};
@@ -258,52 +225,30 @@ void DrawVector (struct Vector vector, SDL_Color color){
     float a_y = (center.y - (point[1] + fase))*1.0;
     float a_x = (point[0] - fase - center.x)*1.0;
     float a = atan(a_y/a_x);
-
     if (a_x < 0) a += M_PI;
-
-    // printf("(%d - (%d + %d) = %0.2f\n", center.y, point[1], fase, a_1);
-    // printf("((%d - %d - %d = %0.2f\n", point[0], fase, center.x, a_2);
-    // printf("atan(%0.2f / %0.2f) = %0.2f\n", a_1, a_2, a);
 
     float h1 = sqrt(pow(flecha_pts[1][0], 2) + pow(flecha_pts[1][1], 2));
     float h2 = sqrt(pow(flecha_pts[2][0], 2) + pow(flecha_pts[2][1], 2));
     float b1 = asin(flecha_pts[1][0]/h1);
     float b2 = asin(flecha_pts[2][0]/h1);
-    // printf("asin(%0.2f / %0.2f) %0.2f\n", flecha_pts[1][0], h1, b1);
-    // printf("acos(%0.2f / %0.2f) %0.2f\n", flecha_pts[1][1], h1, b1);
+
     float x1 = h1*sin(b1 - a);
     float y1 = h1*cos(b1 -a);
-    // printf("%0.2f*sin(%0.2f - %0.2f) = %0.2f\n", h1, b1, a, x1);
-    // printf("%0.2f*cos(%0.2f - %0.2f) = %0.2f\n", h1, b1, a, y1);
-
-    fflush(stdout);
 
     float flecha[3][2] = {
         {0, 0},
         {h1*sin(b1 - (M_PI/2 - a)), h1*cos(b1 - (M_PI/2 - a))},
         {h2*sin(b2 - (M_PI/2 - a)), h2*cos(b2 - (M_PI/2 - a))}
     };
-    // float flecha2[3][2] = {
-    //     {flecha[0][0], flecha[0][1]},
-    //     {flecha[1][0], flecha[1][1]},
-    //     {flecha[2][0], flecha[2][1]}
-    // };
-
     SDL_Point points[] = {
-        {center.x + flecha_pts[0][0], center.y + flecha_pts[0][1]},
-        {center.x + flecha_pts[1][0], center.y + flecha_pts[1][1]},
-        {center.x + flecha_pts[2][0], center.y + flecha_pts[2][1]},
-        {center.x + flecha_pts[0][0], center.y + flecha_pts[0][1]}
-    };
-    SDL_Point points2[] = {
         {point[0] + flecha[0][0] - fase, point[1] + flecha[0][1] + fase},
         {point[0] + flecha[1][0] - fase, point[1] + flecha[1][1] + fase},
         {point[0] + flecha[2][0] - fase, point[1] + flecha[2][1] + fase},
         {point[0] + flecha[0][0] - fase, point[1] + flecha[0][1] + fase}
     };
+
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    // SDL_RenderDrawLines(renderer, points, 4);
-    SDL_RenderDrawLines(renderer, points2, 4);
+    SDL_RenderDrawLines(renderer, points, 4);
     
     SDL_RenderPresent(renderer);
 }
@@ -313,7 +258,7 @@ void DrawFunciones (){
     struct FuncionLineal funcion1;
     funcion1.m = -2;
     funcion1.b = 1;
-    SDL_Color funcion1_col = {0, 255, 0, 255};
+    SDL_Color funcion1_col = {0, 150, 0, 255};
     GraficarLineal(funcion1, funcion1_col);
 
     // Dibujar una parabola
@@ -321,6 +266,33 @@ void DrawFunciones (){
     funcion2.p = 1;
     funcion2.h = 3;
     funcion2.k = -5;
-    SDL_Color funcion2_col = {0, 0, 255, 255};
+    SDL_Color funcion2_col = {0, 0, 150, 255};
     GraficarCuadratica(funcion2, funcion2_col);
+}
+
+void DrawVectores (){
+    struct Vector vector1;
+    vector1.nombre = "Vector Amarillo";
+    vector1.x = 1;
+    vector1.y = 4;
+    vector1.z = 2;
+    SDL_Color vector1_col = {255, 255, 0, 255};
+
+    struct Vector vector2;
+    vector2.nombre = "Vector Azul";
+    vector2.x = -2;
+    vector2.y = 2;
+    vector2.z = 3;
+    SDL_Color vector2_col = {0, 0, 255, 255};
+
+    struct Vector vector3;
+    vector3.nombre = "Vector Rojo";
+    vector3.x = 4;
+    vector3.y = -4;
+    vector3.z = -2;
+    SDL_Color vector3_col = {255, 0, 0, 255};
+
+    DrawVector(vector1, vector1_col);
+    DrawVector(vector2, vector2_col);
+    DrawVector(vector3, vector3_col);
 }

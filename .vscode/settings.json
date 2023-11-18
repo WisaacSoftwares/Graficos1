@@ -3,5 +3,11 @@
         "library.h": "c",
         "sdl.h": "c",
         "sdl_ttf.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "Graficador",
+        "SDLK",
+        "Tavera",
+        "Zarate"
+    ]
 }

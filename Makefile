@@ -8,8 +8,8 @@ LDFLAGS = -L"./resources/SDL2-windows/lib" # windows
 
 LIBS = -lSDL2 -lSDL2_ttf
 
-TARGET = prueba2
-SRC = prueba2.c resources/library.c resources/functions.c resources/vectores.c
+TARGET = main
+SRC = main.c resources/library.c resources/functions.c resources/vectores.c
 
 all: $(TARGET)
 

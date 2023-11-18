@@ -50,15 +50,15 @@ void CerrarVentana (SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font){
     // SDL_Delay(3000);  // Espera 3000 milisegundos (3 segundos)
     // getchar();  // Espera a que se presione Enter antes de salir
     // system("PAUSE");
-    SDL_Event e;
-    int quit = 0;
-    while (!quit) {
-        while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
-                quit = 1;
-            }
-        }
-    }
+    // SDL_Event e;
+    // int quit = 0;
+    // while (!quit) {
+    //     while (SDL_PollEvent(&e) != 0) {
+    //         if (e.type == SDL_QUIT) {
+    //             quit = 1;
+    //         }
+    //     }
+    // }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -90,6 +90,24 @@ void EscribirCanvas(char *texto, int x, int y, SDL_Renderer *renderer, TTF_Font 
     SDL_Surface* surface = TTF_RenderText_Solid(font, texto, textColor);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+    
+    SDL_Rect textRect = {x, y, surface->w, surface->h};
+    SDL_RenderCopy(renderer, texture, NULL, &textRect);
+}
+
+void EscribirCanvasCentrado(char *texto, int x, int y, SDL_Renderer *renderer, TTF_Font *font, SDL_Color textColor) {
+    // Dibujar texto blanco en (100, 500)
+    SDL_Surface* surface = TTF_RenderText_Solid(font, texto, textColor);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    // Obtener las dimensiones del texto
+    int textWidth, textHeight;
+    SDL_QueryTexture(texture, NULL, NULL, &textWidth, &textHeight);
+
+    // Calcular la posición para centrar el texto en la ventana
+    x -= textWidth/2 ;
+    y -= textHeight/2;
     
     SDL_Rect textRect = {x, y, surface->w, surface->h};
     SDL_RenderCopy(renderer, texture, NULL, &textRect);

@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
+struct Color{
+    int r, g, b, a;
+};
+
 struct Vector{
     char * nombre;
     float x, y, z;
+    struct Color color;
 };
 
 struct Vector Suma(struct Vector v1, struct Vector v2);
