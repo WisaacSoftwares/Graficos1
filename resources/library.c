@@ -26,7 +26,8 @@ void IniciarVentana (SDL_Window **window, SDL_Renderer **renderer, int *windowWi
 
     SDL_GetWindowSize(*window, windowWidth, windowHeight);
 
-    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED);
+    *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    SDL_SetRenderDrawBlendMode(*renderer, SDL_BLENDMODE_BLEND);
 
     // Fuentes
     if (TTF_Init() != 0) {
@@ -43,6 +44,27 @@ void IniciarVentana (SDL_Window **window, SDL_Renderer **renderer, int *windowWi
         // return 1;
         printf("Ocurrió un error al cargar las fuentes\n");
     }
+}
+
+void CerrarVentana (SDL_Window *window, SDL_Renderer *renderer, TTF_Font *font){
+    // SDL_Delay(3000);  // Espera 3000 milisegundos (3 segundos)
+    // getchar();  // Espera a que se presione Enter antes de salir
+    // system("PAUSE");
+    SDL_Event e;
+    int quit = 0;
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = 1;
+            }
+        }
+    }
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    TTF_CloseFont(font);
+    TTF_Quit();
 }
 
 // Implementación de la función
@@ -72,3 +94,4 @@ void EscribirCanvas(char *texto, int x, int y, SDL_Renderer *renderer, TTF_Font 
     SDL_Rect textRect = {x, y, surface->w, surface->h};
     SDL_RenderCopy(renderer, texture, NULL, &textRect);
 }
+

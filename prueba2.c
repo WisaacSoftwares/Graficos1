@@ -10,115 +10,90 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include "resources/library.h"
+#include "resources/functions.h"
+#include "resources/vectores.h"
+
+SDL_Window *window;
+SDL_Renderer *renderer;
+TTF_Font *font;
+int windowWidth, windowHeight;
+int pixelsPerUnit = 50;
+SDL_Point center;
+
+float flecha_pts[3][2] = {
+    {0, 0},
+    {-5, 10},
+    {5, 10}
+};
 
 // Declaración de funciones
-void DrawIntro (SDL_Renderer *renderer, TTF_Font *font, int delay);
+void DrawIntro (int delay);
+void DrawPlano ();
+void GraficarCuadratica (struct FuncionCuadratica funcion, SDL_Color color);
+void GraficarLineal (struct FuncionLineal funcion, SDL_Color color);
+void DrawVector (struct Vector vector, SDL_Color color);
+void DrawFunciones ();
 
 int main(int argc, char *argv[]) {
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    TTF_Font *font;
-    int windowWidth, windowHeight;
-
     IniciarVentana(&window, &renderer, &windowWidth, &windowHeight, &font);
+    SDL_Point _center = {(int)(windowWidth/2), (int)(windowHeight/2)};
+    center = _center;
 
-    // printf("Ancho de la ventana: %d\n", windowWidth);
-    // printf("Alto de la ventana: %d\n", windowHeight);
+    // Dibujos
 
-    #pragma Dibujos
+    // DrawIntro(renderer, font, 1000);
 
-    DrawIntro(renderer, font, 3000);
+    // Plano Cartesiano
 
-    #pragma Plano Cartesiano
+    DrawPlano(renderer, windowWidth, windowHeight, pixelsPerUnit, font);
 
-    // Background
-    SDL_SetRenderDrawColor(renderer, 10, 0, 0, 255);
-    SDL_RenderClear(renderer);
+    // Funciones Matemáticas
 
-    // Texto
-    SDL_Color textColor = {225, 225, 255, 255};
-    EscribirCanvas("Graficador", 10, 5, renderer, font, textColor);
+    // DrawFunciones(renderer, windowWidth, windowHeight, pixelsPerUnit, font);
 
-    // Dibujar Plano Cartesiano
-    int pixelsPerUnit = 50;
+    // Vectores
+    struct Vector vector1;
+    vector1.nombre = "Vector Amarillo";
+    vector1.x = 1;
+    vector1.y = 4;
+    vector1.z = 2;
+    SDL_Color vector1_col = {255, 255, 0, 255};
+    DrawVector(vector1, vector1_col);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 127);
-    SDL_RenderDrawLine(renderer, (int)(windowWidth/2), 0, (int)(windowWidth/2), windowHeight);
-    SDL_RenderDrawLine(renderer, 0, (int)(windowHeight/2), windowWidth, (int)(windowHeight/2));
+    struct Vector vector2;
+    vector2.nombre = "Vector Azul";
+    vector2.x = -2;
+    vector2.y = 2;
+    vector2.z = 3;
+    SDL_Color vector2_col = {0, 0, 255, 255};
+    DrawVector(vector2, vector2_col);
 
-    SDL_Point center = {(int)(windowWidth/2), (int)(windowHeight/2)};
-    for (int i = 0; i < windowWidth; i++){
-        if (i % pixelsPerUnit == 0){
-            // SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-            SDL_RenderDrawLine(renderer, i, center.y + 10, i, center.y - 10);
-        }
-    }
-    for (int j = 0; j < windowHeight; j++){
-        if (j % pixelsPerUnit == 0){
-            // SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-            SDL_RenderDrawLine(renderer, center.x + 10, j, center.x - 10, j);
-        }
-    }
+    struct Vector vector3;
+    vector3.nombre = "Vector Rojo";
+    vector3.x = 4;
+    vector3.y = -4;
+    vector3.z = -2;
+    SDL_Color vector3_col = {255, 0, 0, 255};
+    DrawVector(vector3, vector3_col);
 
-    // Dibujar una recta
-    for (int i = 0; i < windowWidth; i++){
-        int x = i -(int)(windowWidth/2);
-        int f = x;
+    // struct Vector vector4;
+    // vector4.nombre = "Vector Verde";
+    // vector4.x = 4;
+    // vector4.y = -4;
+    // vector4.z = 3;
+    // SDL_Color vector4_col = {0, 255, 0, 255};
+    // DrawVector(vector4, vector4_col);
 
-        int j = -f + (int)(windowHeight/2);
+    // Close Events
 
-        SDL_SetRenderDrawColor(renderer, 225, 255, 0, 255);
-        SDL_RenderDrawPoint(renderer, i, j);
-    }
-
-    // Dibujar una parabola
-    
-
-    SDL_Point points[windowWidth];
-    for (int i = 0; i < windowWidth; i++){
-        float x = (i - (windowWidth/2))*1.0/pixelsPerUnit;
-        float f = x * x;
-
-        int j = (int)(-(f*pixelsPerUnit) + (windowHeight/2));
-        // printf("INPUT: %0.2f %0.2f, OUTPUT: %d %d\n", x, f, i, j);
-        // Guardar punto
-        SDL_Point point = {i, j};
-        points[i] = point;
-
-        SDL_SetRenderDrawColor(renderer, 225, 255, 0, 255);
-        SDL_RenderDrawPoint(renderer, i, j);
-    }
-    SDL_SetRenderDrawColor(renderer, 225, 0, 0, 255);
-    SDL_RenderDrawLines(renderer, points, windowWidth);
-
-    SDL_RenderPresent(renderer);
-
-    #pragma Close Events
-
-    // SDL_Delay(3000);  // Espera 3000 milisegundos (3 segundos)
-    // getchar();  // Espera a que se presione Enter antes de salir
-    // system("PAUSE");
-    SDL_Event e;
-    int quit = 0;
-    while (!quit) {
-        while (SDL_PollEvent(&e) != 0) {
-            if (e.type == SDL_QUIT) {
-                quit = 1;
-            }
-        }
-    }
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-    TTF_CloseFont(font);
-    TTF_Quit();
+    CerrarVentana(window, renderer, font);
 
     return 0;
 }
 
-void DrawIntro (SDL_Renderer *renderer, TTF_Font *font, int delay){
+void DrawIntro (int delay){
     // Background
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
@@ -158,4 +133,194 @@ void DrawIntro (SDL_Renderer *renderer, TTF_Font *font, int delay){
     // Uint32 startTime = SDL_GetTicks();  // Obtiene el tiempo de inicio
 
     EsperarTiempo(delay);
+}
+
+void DrawPlano (){
+    // Background
+    SDL_SetRenderDrawColor(renderer, 10, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    // Texto
+    SDL_Color textColor = {225, 225, 255, 255};
+    EscribirCanvas("Graficador", 10, 5, renderer, font, textColor);
+
+    // Dibujar Plano Cartesiano
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 127);
+    SDL_RenderDrawLine(renderer, (int)(windowWidth/2), 0, (int)(windowWidth/2), windowHeight);
+    SDL_RenderDrawLine(renderer, 0, (int)(windowHeight/2), windowWidth, (int)(windowHeight/2));
+
+    // X AXIS
+    for (int i = 0; i < windowWidth; i++){
+        int x = i -(int)(windowWidth/2);
+        int f = x;
+
+        int j = -f + (int)(windowHeight/2);
+
+        int opacity = 255 - (int)(255.0*(i-100)/(windowWidth-200));
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, opacity);
+
+        SDL_RenderDrawPoint(renderer, i, j);
+
+        if (i % (pixelsPerUnit/2) == 0){
+            SDL_RenderDrawLine(renderer, i + 10 , j, i - 10, j);
+        }
+    }
+    EscribirCanvas("X", 80, windowHeight - 50, renderer, font, textColor);
+    // Y AXIS
+    for (int i = 0; i < windowWidth; i++){
+        if (i % pixelsPerUnit == 0){
+            // SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            SDL_RenderDrawLine(renderer, i, center.y + 10, i, center.y - 10);
+        }
+    }
+    EscribirCanvas("Y", windowWidth - 30, center.y + 10, renderer, font, textColor);
+    // Z AXIS
+    for (int k = 0; k < windowHeight; k++){
+        if (k % pixelsPerUnit == 0){
+            // SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            SDL_RenderDrawLine(renderer, center.x + 10, k, center.x - 10, k);
+        }
+    }
+    EscribirCanvas("Z", center.x - 20, 10, renderer, font, textColor);
+
+    SDL_RenderPresent(renderer);
+}
+
+void GraficarCuadratica (struct FuncionCuadratica function, SDL_Color color){
+    // printf("Function, p: %0.2f, h: %0.2f, k: %0.2f\n", function.p, function.h, function.k);
+
+    SDL_Point points[windowWidth];
+    for (int i = 0; i < windowWidth; i++){
+        float x = (i - (windowWidth/2))*1.0/pixelsPerUnit;
+        float y = EvaularFuncionCuadratica(function, x);
+
+        int j = (int)(-(y*pixelsPerUnit) + (windowHeight/2));
+        // printf("INPUT: %0.2f %0.2f, OUTPUT: %d %d\n", x, y, i, j);
+        // Guardar punto
+        SDL_Point point = {i, j};
+        points[i] = point;
+
+        // SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        // SDL_RenderDrawPoint(renderer, i, j);
+    }
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderDrawLines(renderer, points, windowWidth);
+
+    SDL_RenderPresent(renderer);
+}
+
+void GraficarLineal (struct FuncionLineal function, SDL_Color color){
+    // printf("Function, p: %0.2f, h: %0.2f, k: %0.2f\n", function.p, function.h, function.k);
+
+    SDL_Point points[windowWidth];
+    for (int i = 0; i < windowWidth; i++){
+        float x = (i - (windowWidth/2))*1.0/pixelsPerUnit;
+        float y = EvaularFuncionLineal(function, x);
+
+        int j = (int)(-(y*pixelsPerUnit) + (windowHeight/2));
+        // printf("INPUT: %0.2f %0.2f, OUTPUT: %d %d\n", x, y, i, j);
+        // Guardar punto
+        SDL_Point point = {i, j};
+        points[i] = point;
+
+        // SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        // SDL_RenderDrawPoint(renderer, i, j);
+    }
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderDrawLines(renderer, points, windowWidth);
+
+    SDL_RenderPresent(renderer);
+}
+
+void DrawVector (struct Vector vector, SDL_Color color){
+    int fase = (int)(vector.x*(pixelsPerUnit/2));
+    int point[2];
+    point[0] = (int)((vector.y*pixelsPerUnit) + center.x);
+    point[1] = (int)(-(vector.z*pixelsPerUnit) + center.y);
+
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderDrawLine(renderer, center.x, center.y, point[0] - fase, point[1] + fase);
+
+    // Guías
+    if (vector.x > 0) SDL_SetRenderDrawColor(renderer, 255, 255, 255, 100);
+    else SDL_SetRenderDrawColor(renderer, 255, 255, 255, 30);
+    
+    SDL_RenderDrawLine(renderer, center.x, center.y, point[0] - fase, center.y + fase); // del origen hasta la proyección YX
+    SDL_Rect rect1 = {center.x, point[1], (int)(vector.y*pixelsPerUnit), (int)(vector.z*pixelsPerUnit)};
+    SDL_RenderDrawRect(renderer, &rect1);
+    SDL_Rect rect2 = {center.x - fase, point[1] + fase, (int)(vector.y*pixelsPerUnit), (int)(vector.z*pixelsPerUnit)};
+    SDL_RenderDrawRect(renderer, &rect2);
+    SDL_RenderDrawLine(renderer, point[0], center.y, point[0] - fase, center.y + fase); // union 1
+    SDL_RenderDrawLine(renderer, point[0], point[1], point[0] - fase, point[1] + fase); // union 2
+    SDL_RenderDrawLine(renderer, center.x, point[1], center.x - fase, point[1] + fase); // union 2
+
+    // Flecha
+    float a_y = (center.y - (point[1] + fase))*1.0;
+    float a_x = (point[0] - fase - center.x)*1.0;
+    float a = atan(a_y/a_x);
+
+    if (a_x < 0) a += M_PI;
+
+    // printf("(%d - (%d + %d) = %0.2f\n", center.y, point[1], fase, a_1);
+    // printf("((%d - %d - %d = %0.2f\n", point[0], fase, center.x, a_2);
+    // printf("atan(%0.2f / %0.2f) = %0.2f\n", a_1, a_2, a);
+
+    float h1 = sqrt(pow(flecha_pts[1][0], 2) + pow(flecha_pts[1][1], 2));
+    float h2 = sqrt(pow(flecha_pts[2][0], 2) + pow(flecha_pts[2][1], 2));
+    float b1 = asin(flecha_pts[1][0]/h1);
+    float b2 = asin(flecha_pts[2][0]/h1);
+    // printf("asin(%0.2f / %0.2f) %0.2f\n", flecha_pts[1][0], h1, b1);
+    // printf("acos(%0.2f / %0.2f) %0.2f\n", flecha_pts[1][1], h1, b1);
+    float x1 = h1*sin(b1 - a);
+    float y1 = h1*cos(b1 -a);
+    // printf("%0.2f*sin(%0.2f - %0.2f) = %0.2f\n", h1, b1, a, x1);
+    // printf("%0.2f*cos(%0.2f - %0.2f) = %0.2f\n", h1, b1, a, y1);
+
+    fflush(stdout);
+
+    float flecha[3][2] = {
+        {0, 0},
+        {h1*sin(b1 - (M_PI/2 - a)), h1*cos(b1 - (M_PI/2 - a))},
+        {h2*sin(b2 - (M_PI/2 - a)), h2*cos(b2 - (M_PI/2 - a))}
+    };
+    // float flecha2[3][2] = {
+    //     {flecha[0][0], flecha[0][1]},
+    //     {flecha[1][0], flecha[1][1]},
+    //     {flecha[2][0], flecha[2][1]}
+    // };
+
+    SDL_Point points[] = {
+        {center.x + flecha_pts[0][0], center.y + flecha_pts[0][1]},
+        {center.x + flecha_pts[1][0], center.y + flecha_pts[1][1]},
+        {center.x + flecha_pts[2][0], center.y + flecha_pts[2][1]},
+        {center.x + flecha_pts[0][0], center.y + flecha_pts[0][1]}
+    };
+    SDL_Point points2[] = {
+        {point[0] + flecha[0][0] - fase, point[1] + flecha[0][1] + fase},
+        {point[0] + flecha[1][0] - fase, point[1] + flecha[1][1] + fase},
+        {point[0] + flecha[2][0] - fase, point[1] + flecha[2][1] + fase},
+        {point[0] + flecha[0][0] - fase, point[1] + flecha[0][1] + fase}
+    };
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    // SDL_RenderDrawLines(renderer, points, 4);
+    SDL_RenderDrawLines(renderer, points2, 4);
+    
+    SDL_RenderPresent(renderer);
+}
+
+void DrawFunciones (){
+    // Dibujar una recta
+    struct FuncionLineal funcion1;
+    funcion1.m = -2;
+    funcion1.b = 1;
+    SDL_Color funcion1_col = {0, 255, 0, 255};
+    GraficarLineal(funcion1, funcion1_col);
+
+    // Dibujar una parabola
+    struct FuncionCuadratica funcion2;
+    funcion2.p = 1;
+    funcion2.h = 3;
+    funcion2.k = -5;
+    SDL_Color funcion2_col = {0, 0, 255, 255};
+    GraficarCuadratica(funcion2, funcion2_col);
 }
