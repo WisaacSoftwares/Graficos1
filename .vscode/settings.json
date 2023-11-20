@@ -5,7 +5,10 @@
         "sdl_ttf.h": "c"
     },
     "cSpell.words": [
+        "Accion",
         "Graficador",
+        "opcion",
+        "operacion",
         "SDLK",
         "Tavera",
         "Zarate"
