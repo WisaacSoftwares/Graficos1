@@ -9,7 +9,8 @@ LDFLAGS = -L"./resources/SDL2-windows/lib" # windows
 LIBS = -lSDL2 -lSDL2_ttf
 
 TARGET = main
-SRC = main.c resources/library.c resources/functions.c resources/vectores.c
+SRC = main.c resources/library.c resources/vectores.c resources/controlador.c resources/render.c resources/ui.c
+# resources/functions.c 
 
 all: $(TARGET)
 

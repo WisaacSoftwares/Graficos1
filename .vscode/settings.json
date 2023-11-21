@@ -2,15 +2,29 @@
     "files.associations": {
         "library.h": "c",
         "sdl.h": "c",
-        "sdl_ttf.h": "c"
+        "sdl_ttf.h": "c",
+        "stdio.h": "c",
+        "render.h": "c",
+        "string.h": "c",
+        "stdbool.h": "c",
+        "ui.h": "c",
+        "controlador.h": "c",
+        "vectores.h": "c"
     },
     "cSpell.words": [
         "Accion",
+        "ARRAYLENGHT",
+        "Caracter",
+        "desface",
         "Graficador",
+        "Milantoni",
         "opcion",
         "operacion",
+        "posicion",
+        "Roboto",
         "SDLK",
         "Tavera",
         "Zarate"
-    ]
+    ],
+    "C_Cpp.errorSquiggles": "disabled"
 }
