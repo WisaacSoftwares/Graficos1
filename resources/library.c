@@ -173,3 +173,9 @@ void LiberarInput() {
     EscribirTextoCentrado(" ", W_CENTER.x, W_HEIGHT - 50, FONT_SMALL, COLOR_TRANSPARENTE, false);
 }
 
+char * DoubleToStr(double x){
+    int size = snprintf(NULL, 0, "%0.2f", x);
+    char * cteChar = (char *)malloc(size + 1);
+    sprintf(cteChar, "%0.2f", x);
+    return cteChar;
+}

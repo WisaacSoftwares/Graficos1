@@ -44,3 +44,4 @@ void EscribirTextoDerecha(char *texto, int x, int y, TTF_Font *font, SDL_Color t
 void EsperarTiempo(int milisegundos);
 void EsperarTecla();
 void LiberarInput();
+char * DoubleToStr(double x);

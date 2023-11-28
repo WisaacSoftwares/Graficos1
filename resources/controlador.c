@@ -80,11 +80,13 @@ void GenerarMenuPrincipal (){
             "Producto cruz"
         };
         int opc = 0;
-        int vector1, vector2;
-        while (opc == 0){
-            int vector1 = DibujarMenuVectores("Elije el primer vector", "Regresar", false);
+        int id1, id2;
+        struct Vector nuevoVector;
 
-            if (vector1 != -1){
+        while (opc == 0){
+            int id1 = DibujarMenuVectores("Elije el primer vector", "Regresar", false);
+
+            if (id1 != -1){
                 int opc = DibujarMenuSecundario("Elije la operacion", opciones2, 5);
 
                 while (opc != 0 && opc != -1){
@@ -93,18 +95,48 @@ void GenerarMenuPrincipal (){
                         if (resp != NULL){
                             // float numero = strtof(resp, NULL);
                             double numero = strtod(resp, NULL);
-                            printf("Felicidades vas a hacer la multiplicación escalar entre %s y %s, %s = %0.2f\n", VECTORES[vector1].nombre, resp, resp, numero);
-                            fflush(stdout);
+                            // printf("Felicidades vas a hacer la multiplicación escalar entre %s y %s, %s = %0.2f\n", VECTORES[id1].nombre, resp, resp, numero);
+                            // fflush(stdout);
+                            nuevoVector = MultiplicarCte(VECTORES[id1], numero);
+                            CrearVectorDatos(nuevoVector.nombre, nuevoVector.x, nuevoVector.y, nuevoVector.z);
                             return;
                         } else {
                             opc = DibujarMenuSecundario("Elije la operacion", opciones2, 5);
                         }
                     } else{
-                        vector2 = DibujarMenuVectores("Elije el segundo vector", "Regresar", false);
+                        id2 = DibujarMenuVectores("Elije el segundo vector", "Regresar", false);
 
-                        if (vector2 != -1) {
-                            printf("Felicidades vas a hacer la operacion %d entre %s y %s\n", opc, VECTORES[vector1].nombre, VECTORES[vector2].nombre);
-                            fflush(stdout);
+                        if (id2 != -1) {
+                            double pPunto;
+                            char * texto[] = {
+                                "Realizaste un producto punto",
+                                "que devuelve un escalar...",
+                                " "
+                            };
+                            
+                            switch (opc)
+                            {
+                            case 1: // Suma de vectores
+                                nuevoVector = Suma(VECTORES[id1], VECTORES[id2]);
+                                CrearVectorDatos(nuevoVector.nombre, nuevoVector.x, nuevoVector.y, nuevoVector.z);
+                                break;
+                            case 3: // Producto Punto
+                                pPunto = ProductoPunto(VECTORES[id1], VECTORES[id2]);
+                                int sizeChar = snprintf(NULL, 0, "%s . %s = %s", VECTORES[id1].nombre, VECTORES[id2].nombre, DoubleToStr(pPunto));
+                                texto[2] = (char *)malloc(sizeChar + 1);
+                                sprintf(texto[2], "%s . %s = %s", VECTORES[id1].nombre, VECTORES[id2].nombre, DoubleToStr(pPunto));
+
+                                DibujarMuchoTexto("Producto Punto", texto, 3);
+                                break;
+                            case 4: // Producto Cruz
+                                nuevoVector = ProductoCruz(VECTORES[id1], VECTORES[id2]);
+                                CrearVectorDatos(nuevoVector.nombre, nuevoVector.x, nuevoVector.y, nuevoVector.z);
+                                break;
+                            default:
+                                break;
+                            }
+                            // printf("Felicidades vas a hacer la operacion %d entre %s y %s\n", opc, VECTORES[id1].nombre, VECTORES[id2].nombre);
+                            // fflush(stdout);
                             return;
                         } else {
                             opc = DibujarMenuSecundario("Elije la operacion", opciones2, 5);

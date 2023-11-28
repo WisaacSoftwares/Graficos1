@@ -70,7 +70,7 @@ char* ObtenerTexto(char * titulo, int numChar, char * texto, bool soloNumeros){
                 CerrarVentana();
                 exit(0);
             } else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE) {
-                input = NULL;
+                input = texto;
                 termino = true;
             } else if (e.type == SDL_KEYDOWN) {
                 if (e.key.keysym.sym == SDLK_BACKSPACE) {
@@ -576,12 +576,12 @@ void DibujarMuchoTexto(char * titulo, char **texto, int numFilas){
     SetRenderDrawColor(COLOR_GRIS_OSCURO);
     RenderRect(areaInicia.x, areaInicia.y, areaTermina.x - areaInicia.x, MENU_CONTROL_H, false);
     
-    for (int i = 0; i < numFilas; i++)
-    {
-        printf(texto[i]);
-        printf("\n");
-    }
-    fflush(stdout);
+    // for (int i = 0; i < numFilas; i++)
+    // {
+    //     printf(texto[i]);
+    //     printf("\n");
+    // }
+    // fflush(stdout);
 
     int posicion = 4+3;
         EscribirTexto(texto[4], areaInicia.x + 10 , areaInicia.y + 20*posicion + 8, FONT_SMALL, COLOR_NEGRO, false);
@@ -593,8 +593,8 @@ void DibujarMuchoTexto(char * titulo, char **texto, int numFilas){
         int posicion = i+3;
         EscribirTexto(texto[i], areaInicia.x + 10 , areaInicia.y + 20*posicion + 8, FONT_SMALL, COLOR_NEGRO, false);
     }
-    printf("Llego aqui\n");
-    fflush(stdout);
+    // printf("Llego aqui\n");
+    // fflush(stdout);
     // Work area END
     SetRenderDrawColor(COLOR_GRIS);
     RenderRect(areaInicia.x, areaInicia.y + MENU_CONTROL_H*2, areaTermina.x - areaInicia.x, areaTermina.y - (areaInicia.y + MENU_CONTROL_H*2), false);

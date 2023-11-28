@@ -8,16 +8,16 @@ struct Vector VECTORES[VECTORES_MAX];
 
 void IniciarVectores () {
     struct Vector _vectoresPref[VECTORES_MAX] = {
-        {"Vector 1", 1, 2, 1, COLOR_AZUL},
-        {"Vector 2", -2, 1, 1, COLOR_AMARILLO},
-        {"Vector 3", 1, -3, 5, COLOR_ROJO},
-        {"Vector 4", 1, 1, 1, COLOR_VERDE_OSCURO},
-        {"Vector 5", 1, 1, 1, COLOR_NARANJA},
-        {"Vector 6", 1, 1, 1, COLOR_CYAN},
-        {"Vector 7", 1, 1, 1, COLOR_CREMA},
-        {"Vector 8", 1, 1, 1, COLOR_MORADO},
-        {"Vector 9", 1, 1, 1, COLOR_KHAKI},
-        {"Vector 10", 1, 1, 1, COLOR_BLANCO}
+        {"A", 1, 2, 1, COLOR_AZUL},
+        {"B", -2, 1, 1, COLOR_AMARILLO},
+        {"C", 1, 1, 1, COLOR_ROJO},
+        {"D", 1, 1, 1, COLOR_VERDE_OSCURO},
+        {"E", 1, 1, 1, COLOR_NARANJA},
+        {"F", 1, 1, 1, COLOR_CYAN},
+        {"G", 1, 1, 1, COLOR_CREMA},
+        {"H", 1, 1, 1, COLOR_MORADO},
+        {"I", 1, 1, 1, COLOR_KHAKI},
+        {"J", 1, 1, 1, COLOR_BLANCO}
     };
     VECTORES_PREF[0] = _vectoresPref[0];
     VECTORES_PREF[1] = _vectoresPref[1];
@@ -34,8 +34,7 @@ void IniciarVectores () {
 
     VECTORES[0] = VECTORES_PREF[0];
     VECTORES[1] = VECTORES_PREF[1];
-    VECTORES[2] = VECTORES_PREF[2];
-    VECTORES[3] = VECTOR_NULO;
+    VECTORES[2] = VECTOR_NULO;
 }
 
 int NumeroVectores(){
@@ -54,6 +53,18 @@ int CrearVector (){
     return NumeroVectores() - 1;
 }
 
+int CrearVectorDatos(char * nombre, double x, double y, double z){
+    int id;
+    if (NumeroVectores() < VECTORES_MAX) VECTORES[NumeroVectores()] = VECTORES_PREF[NumeroVectores()];
+    id = NumeroVectores() - 1;
+    VECTORES[id].nombre = nombre;
+    VECTORES[id].x = x;
+    VECTORES[id].y = y;
+    VECTORES[id].z = z;
+
+    return id;
+}
+
 void EliminarVector(int id) {
     if (VECTORES[id].nombre != NULL) {
         struct Vector tempPREF = VECTORES_PREF[id];
@@ -69,23 +80,41 @@ void EliminarVector(int id) {
     fflush(stdout);
 }
 
+char * ConcatenarNombre(char * nombre1, char ope, char * nombre2){
+    // Define el tamaño del nombre
+    int sizeChar = snprintf(NULL, 0, "%s %c %s", nombre1, ope, nombre2);
+    // Asigna el espacio
+    char * str = (char *)malloc(sizeChar + 1);
+    // Concatena el nombre
+    sprintf(str, "%s %c %s", nombre1, ope, nombre2);
+    return str; // Devuelvo
+}
+
 struct Vector Suma(struct Vector v1, struct Vector v2){
     struct Vector resultado;
 
+    resultado.nombre = ConcatenarNombre(v1.nombre, '+', v2.nombre);
+    resultado.x=v1.x+v2.x;
+    resultado.y=v1.y+v2.y;
+    resultado.z=v1.z+v2.z;
     // Operación
     return resultado;
 }
 
 struct Vector MultiplicarCte(struct Vector v1, float cte){
     struct Vector resultado;
-
+    
+    resultado.nombre = ConcatenarNombre(v1.nombre, '*', DoubleToStr(cte));
+    resultado.x = v1.x * cte;
+    resultado.y = v1.y * cte;
+    resultado.z = v1.z * cte;
     // Operación
     return resultado;
 }
 
-float ProductoPunto(struct Vector v1, struct Vector v2){
-    float resultado;
-
+double ProductoPunto(struct Vector v1, struct Vector v2){
+    double resultado;
+    resultado = (v1.x*v2.x) + (v1.y*v2.y) + (v1.z*v2.z); 
     // Operación
     return resultado;
 }
@@ -93,6 +122,10 @@ float ProductoPunto(struct Vector v1, struct Vector v2){
 struct Vector ProductoCruz(struct Vector v1, struct Vector v2){
     struct Vector resultado;
 
+    resultado.nombre = ConcatenarNombre(v1.nombre, 'x', v2.nombre);
+    resultado.x = (v1.y*v2.z)-(v1.z*v2.y); 
+    resultado.y = ((v1.x*v2.z)-(v1.z*v2.x))*(-1); 
+    resultado.z = (v1.x*v2.y)-(v1.y*v2.x); 
     // Operación
     return resultado;
 }

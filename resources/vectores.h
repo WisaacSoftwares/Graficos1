@@ -17,9 +17,10 @@ extern struct Vector VECTORES[];
 void IniciarVectores ();
 int NumeroVectores();
 int CrearVector ();
+int CrearVectorDatos(char * nombre, double x, double y, double z);
 void EliminarVector(int id);
 
 struct Vector Suma (struct Vector v1, struct Vector v2);
 struct Vector MultiplicarCte (struct Vector v1, float cte);
-float ProductoPunto (struct Vector v1, struct Vector v2);
+double ProductoPunto (struct Vector v1, struct Vector v2);
 struct Vector ProductoCruz (struct Vector v1, struct Vector v2);
