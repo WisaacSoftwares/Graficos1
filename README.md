@@ -13,6 +13,8 @@ Angel Owen Torres Martinez
 UNIVERSIDAD DE GUANAJUATO DCI LEON
 NOV 2023
 
+Descarga aquí: https://github.com/WisaacSoftwares/Graficos1/releases/tag/DESCARGA
+
 # Screenshots
 
 ![alt text](https://raw.githubusercontent.com/WisaacSoftwares/Graficos1/master/Screenshots/Preview5.png?raw=true "Screenshot del programa")
