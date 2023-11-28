@@ -4,10 +4,10 @@ Este programa fue un proyecto de primer semestre del curso de
 Programación Basica de la Universidad de Guanajuato.
 
 CREDITOS:
-Luis Isaac Tavera Zarate
-Leonardo Alejandro Roldan Alvarado
-Angel Gael Milantoni Perez
-Joseph Alfonso Jasso Estrada
+Luis Isaac Tavera Zarate,
+Leonardo Alejandro Roldan Alvarado,
+Angel Gael Milantoni Perez,
+Joseph Alfonso Jasso Estrada,
 Angel Owen Torres Martinez
 
 UNIVERSIDAD DE GUANAJUATO DCI LEON
